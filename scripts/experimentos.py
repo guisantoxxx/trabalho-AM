@@ -7,10 +7,8 @@
 # Prof. Tiago A. Almeida
 #
 #
-# Nome:
+# Nome: Guilherme Fernades Rezende Santos
 # RA:
 # ################################################################
 
 # Arquivo com todas as funcoes e codigos referentes aos experimentos
-
-# Aqui farei funçoes que criam, treinam o modelo e retornam o resultado a ser escrito em .csv
