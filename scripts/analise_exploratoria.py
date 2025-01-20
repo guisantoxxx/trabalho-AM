@@ -45,7 +45,7 @@ def plotar_boxplot(df, coluna, target):
 def plotar_correlacao(df):
     correlacao = df.corr()
 
-    plt.figure(figsize=(12, 10))
+    plt.figure(figsize=(15, 12))
     sns.heatmap(correlacao, annot=True, cmap="coolwarm", linewidths=0.5)
     plt.title("Matriz de Correlação")
     plt.show()
