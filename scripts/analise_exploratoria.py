@@ -49,3 +49,13 @@ def plotar_correlacao(df):
     sns.heatmap(correlacao, annot=True, cmap="coolwarm", linewidths=0.5)
     plt.title("Matriz de Correlação")
     plt.show()
+
+
+def plot_hist(df, coluna):
+    plt.figure(figsize=(8, 6))
+    sns.histplot(df[coluna], kde=True, bins=20, color="blue")
+    plt.title(f"Distribuição do atributo: {coluna}")
+    plt.xlabel(coluna)
+    plt.ylabel("Frequência")
+    plt.grid(axis="y", linestyle="--", alpha=0.7)
+    plt.show()

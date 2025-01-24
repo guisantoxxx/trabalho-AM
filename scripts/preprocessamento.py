@@ -25,8 +25,7 @@ def converter_numeric(df, coluna):
 
 
 def identifica_outliners(df, colunas):
-
-    # Criar uma cópia do DataFrame sem NaN nas colunas especificadas, para poder calcular Q1,Q3 e IQR
+    # Criar uma cópia do DataFrame sem NaN nas colunas especificadas, para calcular Q1, Q3 e IQR
     df_not_nan = df.dropna(subset=colunas)
 
     Q1 = df_not_nan[colunas].quantile(0.25)
@@ -36,13 +35,17 @@ def identifica_outliners(df, colunas):
     limite_inferior = Q1 - 1.5 * IQR
     limite_superior = Q3 + 1.5 * IQR
 
-    # Insere todas as amostrar que possuem outliners no df_aux
+    # Identificar outliers apenas nas linhas válidas
     outliners = (
         (df_not_nan[colunas] < limite_inferior)
         | (df_not_nan[colunas] > limite_superior)
     ).any(axis=1)
 
-    return outliners
+    # Criar um vetor booleano do mesmo tamanho do DataFrame original
+    outliners_full = pd.Series(False, index=df.index)
+    outliners_full.loc[df_not_nan.index] = outliners
+
+    return outliners_full
 
 
 def fill_na_media(df, coluna):
