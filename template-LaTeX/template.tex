@@ -345,8 +345,16 @@
 
 
 % correct bad hyphenation here
+\usepackage{graphicx}
+\usepackage{booktabs} % Para bordas bonitas
+\usepackage{multirow} % Para células que ocupam múltiplas linhas
+\usepackage{siunitx} % Para alinhar números com incertezas
 \usepackage{hyperref}
 \usepackage{graphicx}
+\sisetup{
+  separate-uncertainty=true, % Habilita o formato "x ± y"
+  table-align-uncertainty=true, % Alinha corretamente incertezas na tabela
+}
 \hyphenation{op-tical net-works semi-conduc-tor}
 \begin{document}
 %
@@ -429,15 +437,15 @@ e fatores de risco que possam indicar a presença de doenças cardíacas. A impl
 mais informadas e na adoção de medidas preventivas, contribuindo para a melhoria da qualidade de vida e do prognóstico dos pacientes.
 
 \section{Trabalhos relacionados}
-O conjunto de dados fornecidos possui diversas colunas categóricas, o que torna necessário mapear esses dados para valores numéricos, afim de 
+O conjunto de dados fornecidos possui diversas colunas categóricas, o que torna necessário mapear esses dados para valores numéricos, a fim de 
 possibilitar o uso dos dados para treinamento do modelo. Em Aprendizado de Máquina para Predição de Diagnósticos de Doenças Cardiovasculares,
-Francisco Romes da Silva Filho e Emanuel F. Coutinho1.(2022), houve uma situação parecida, onde decidiram utilizar o multi-hot encoding para a tranformação
-dos dados, com base nessa escolha, assim, surgiu-se a ideia de aplicar o método One-hot-encoding para transformar os dados.
+Francisco Romes da Silva Filho e Emanuel F. Coutinho.(2022)\cite{IEEEhowto:kopka}, houve uma situação semelhante, na qual foi utilizado o método 
+multi-hot encoding para a transformação dos dados. Com base nessa escolha, surgiu a ideia de aplicar o método one-hot encoding para transformar os dados.
 
-Segundo o estudo, as consequencias da DCV. Ghosh et al. (2021), é mostrado a eficácia do método de classificação Random Forest
-para a classificação de doenças cardíacas, o que abriu a possibilidade de usar o mesmo modelo nesse projeto.
+Segundo o estudo sobre as consequências da DCV.Ghosh et al. (2021) \cite{citekey}, foi demonstrada a eficácia do método de classificação Random Forest para a 
+classificação de doenças cardíacas, o que abriu a possibilidade de utilizar o mesmo modelo neste projeto.
 
-\vspace{1cm}
+
 
 \section{Análise de dados e pré-processamento}
 O dataset foi desenvolvido pelo Real Hospital Português (RHP) com o objetivo de facilitar o estudo e a identificação de padrões 
@@ -496,16 +504,16 @@ categóricas pode requerer a padronização desses valores. Além disso, para at
 é essencial aplicar técnicas como o one-hot encoding.
 \begin{figure}[htbp]
   \centering
-  \begin{minipage}{0.2\textwidth} % Ajuste a largura conforme necessário
+  \begin{minipage}{0.2\textwidth} 
     \centering
-    \includegraphics[width=\textwidth]{box_plot_idade.png} % Primeira imagem
+    \includegraphics[width=\textwidth]{box_plot_idade.png} 
     \tiny{\caption{Box plot da idade}}
     \label{fig:box_plot_idade}
   \end{minipage}
-  \hfill % Espaço entre as imagens
+  \hfill 
   \begin{minipage}{0.2\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{sopro.png} % Segunda imagem
+    \includegraphics[width=\textwidth]{sopro.png}
     \tiny{\caption{Gráfico de sopro}}
     \label{fig:sopro}
   \end{minipage}
@@ -523,6 +531,232 @@ certa quantidade de amostras pertencentes à classe Normal, visando evitar o vi�
   \tiny{\caption{distribuicao de classes no conjunto de treino}}
   \label{fig:classe}
 \end{figure}
+
+
+\subsection{Pré-processamento}
+Devido ao número limitado de amostras no conjunto de treino, optou-se por preservar o máximo possível de dados, preferindo a imputação de valores nulos e irregulares nas colunas numéricas em vez de sua remoção. Primeiro, valores irreais foram definidos como nulos para não distorcer as medidas descritivas. Em seguida, aplicou-se a imputação pela mediana nos valores faltantes, após isso , o IMC foi recalculado com base nos novos valores. A mediana foi escolhida devido ao alto desvio padrão em relação à grandeza dos atributos.
+
+\vspace{0.3cm}
+\begin{center}
+{\scriptsize
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+Peso & Altura & IDADE & PA SISTOLICA & PA DIASTOLICA & FC \\ 
+\hline
+17.31   & 33.29   & 4.59 & 10.58 & 8.68 & 16.63   \\ 
+\hline
+\end{tabular}
+}
+\vspace{0.1cm}
+\par {\scriptsize Valores do desvio padrão de cada atributo tratado.}
+\end{center}
+\vspace{0.2cm}
+
+
+Para as colunas categóricas, a maioria das amostras com valores faltantes foi removida, exceto em "Pulsos", "HDA2", "MOTIVO2" e "PPA". Os três primeiros casos foram mantidos devido ao grande número de valores faltantes, cuja remoção prejudicaria o treinamento do modelo, enquanto "PPA" continha a categoria 'Não calculado', que foi usada para substituir os nulos.
+
+No conjunto de testes, a abordagem foi similar, com a diferença de que todos os valores faltantes nas colunas categóricas foram substituídos pela moda, já que a remoção de amostras não era permitida.
+
+Após o tratamento dos valores espúrios, criou-se o atributo 'SOPRO PESO', combinando 'SOPRO' e 'Peso'. A decisão foi motivada pela alta correlação do atributo target com ambos, além da forte correlação entre eles. Para evitar redundância, o atributo 'Peso' foi removido, já que sua informação foi incorporada no novo atributo.
+
+As colunas numéricas foram normalizadas utilizando o método QuantileTransformer. Essa abordagem teve como objetivo reduzir o impacto de outliers no modelo e padronizar a escala dos valores, já que alguns algoritmos, como a Regressão Logística, são sensíveis a diferenças de grandeza entre os atributos.
+
+As colunas categóricas foram mapeadas através do método One Hot Label Encoding, para evitar a criação de pesos ou hierarquias inadequadas aos valores.
+
+
+\section{Protocolo experimental}
+Neste projeto, foram implementados os seguintes modelos de aprendizado: K-Neighbors, Naive Bayes, Regressão Logística,
+Redes neurais artificiais, Máquinas de vetores de suporte e floresta aleatória.
+A técnica de florestas aleatórias foi escolhida pois a mesma mostrou bons resultados para diversos trabalhos relacionadoa à dados médicos.
+
+Como modelos como florestas aleatórias, máquinas de vetores de suporte, redes neurais artificiais e regressão logística são sensíveis à alteração de seus hiper-parâmetros, foi utiliziado o método de GridSearch para encontrar os melhores parâmetros para cada um desses modelos. A busca foi feita utilizando o conjunto de treino utilizando cross-validation com 5 folds, onde a combinação que apresentou a melhor acurácia seria selecionada.
+A  busca foi estruturada da seguinte forma:
+\vspace{0.3cm}
+
+\begin{itemize}
+        \item Na regressão logística foram testados valores de C em um intervalo de 10\textsuperscript{-2} até 10\textsuperscript{3} com passo de 1 na potência.
+        \item O número de hidden-layer-sizes para redes neurais artificiais foi testado em um intervalo de 10 até 40.
+        \item No caso de máquinas de vetores de suporte com kernel linear, foram testados valores de C em um intervalo de 10\textsuperscript{-2} até 10\textsuperscript{3} com passo de 1 na potência.
+        \item Para máquinas de vetores de suporte com kernel linear e com kernel polinomial, foram testados valores de \( C \) e \( \gamma \) em um intervalo de \( 10^{-2} \) até \( 10^{3} \) com passo de 1 na potência.
+
+        \item O número de estimators em random forest foi testado em um intervalo de 100 a 300, com incremento de 50.
+\end{itemize}
+
+\vspace{0.3cm}
+Após o término da busca, os seguintes valores de hiper-parâmetros foram escolhidos:
+
+\vspace{0.3cm}
+\begin{itemize}
+    \item Regressão Logística: \( C = 1 \).
+    \item Florestas aleatórias: 150 estimators.
+    \item Redes Neurais Artificiais: 10 hidden layers.
+    \item Máquinas de vetores de suporte (linear): \( C = 0.1 \).
+    \item Máquinas de vetores de suporte (radial): \( C = 1, 
+    \gamma = 0.1 \).
+    \item Máquinas de vetores de suporte (polinomial): \( C = x, 
+    \gamma = x \).
+\end{itemize}
+
+\vspace{0.3cm}
+
+Todos os modelos, assim como os métodos de pré-processamento e avaliação, foram implementados utilizando a biblioteca scikit-learn.
+
+Afim de obter os resultados avaliativos, foi utilizado o método cross-validation com 5 folds. Para avaliar os modelos, foram calculadas a média e desvio padrão de cada uma das seguintes medidas de avaliação:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+  \item Acurácia - Proporção de previsões corretas em relação ao total de previsões.
+  \item Precisão - Proporção de verdadeiros positivos entre todas as previsões classificadas como positivas.
+  \item Recall - Proporção de verdadeiros positivos identificados corretamente em relação a todos os casos positivos reais.
+  \item F1 Score - Média harmônica entre precisão e recall, equilibrando os dois indicadores.
+\end{itemize}
+
+  \vspace{0.3cm}
+
+  Adicionalmente, a curva ROC foi plotada a partir da divisão do conjunto de treinamento em 80\% para treino e 20\% \
+  para teste. Essa análise visou identificar o modelo com o maior valor de AUC, permitindo selecionar a melhor opção para a competição 
+  com base no desempenho discriminativo.
+
+
+
+\section{Resultados}
+A tabela abaixo apresenta a média e desvio padrão de todas as medidas de desempenho selecionados, em ordem decrescente de acurácia.
+
+\begin{table}[ht]
+  \tiny
+  \centering
+  \begin{tabular}{l
+                  S[table-format=2.2(2)]
+                  S[table-format=2.2(2)]
+                  S[table-format=2.2(2)]
+                  S[table-format=1.2(2)]}
+  \toprule
+  \textbf{Modelo} & \textbf{Acurácia (\%)} & \textbf{Precisão (\%)} & \textbf{Recall (\%)} & \textbf{F1 Score (\%)} \\
+  \midrule
+  Random Forest       & 88.63 \pm 1.74 & 72.28 \pm 5.45 & 3.20 \pm 1.58 & 0.86 \pm 0.02 \\
+  SVM Radial          & 87.83 \pm 2.10 & 72.17 \pm 6.17 & 4.34 \pm 1.59 & 0.85 \pm 0.03 \\
+  SVM Polinomial      & 87.45 \pm 1.92 & 71.27 \pm 5.72 & 4.45 \pm 1.52 & 0.85 \pm 0.02 \\
+  SVM Linear          & 87.33 \pm 2.12 & 70.51 \pm 5.74 & 4.25 \pm 1.84 & 0.85 \pm 0.02 \\
+  Regressão Logística & 86.10 \pm 1.98 & 71.24 \pm 5.27 & 6.46 \pm 1.96 & 0.84 \pm 0.02 \\
+  Redes Neurais       & 86.10 \pm 1.98 & 71.24 \pm 5.27 & 6.46 \pm 1.96 & 0.84 \pm 0.02 \\
+  7-NN                & 85.67 \pm 1.99 & 76.96 \pm 5.11 & 5.73 \pm 2.17 & 0.83 \pm 0.03 \\
+  5-NN                & 85.52 \pm 1.72 & 70.84 \pm 4.77 & 6.96 \pm 2.17 & 0.83 \pm 0.02 \\
+  3-NN                & 84.07 \pm 2.87 & 71.75 \pm 5.53 & 9.77 \pm 3.10 & 0.82 \pm 0.03 \\
+  Naïve Bayes         & 82.51 \pm 2.15 & 72.06 \pm 4.88 & 12.27 \pm 2.42 & 0.80 \pm 0.03 \\
+  \bottomrule
+  \end{tabular}
+\end{table}
+
+A análise dos resultados demonstra que a maioria dos métodos avaliados foi eficaz na detecção de pacientes com condições cardíacas anormais, 
+apresentando desempenho satisfatório em termos de precisão e recall. Observa-se que as técnicas de classificação conseguiram identificar corretamente 
+uma proporção significativa de casos anormais, com destaque para métodos como Random Forest e máquinas de vetores de suporte (SVM) com diferentes kernels, que alcançaram um equilíbrio adequado entre a detecção de casos anormais e a minimização de falsos positivos.
+
+No entanto, é crucial ressaltar que alguns métodos apresentaram taxas elevadas de classificação incorreta de pacientes saudáveis como anormais, o que pode comprometer sua aplicação em cenários clínicos reais. Nesse aspecto, técnicas como Random Forest e SVM com kernel polinomial se destacaram por apresentarem as menores taxas de falsos positivos, sendo consideradas mais adequadas para aplicações práticas.
+
+Em termos de desempenho geral, o Random Forest obteve os melhores resultados, com um equilíbrio notável entre acurácia, precisão e recall. Métodos como regressão logística e SVM com kernels radial e linear também demonstraram resultados consistentes, embora ligeiramente inferiores. Por outro lado, técnicas baseadas em k-NN e Naive Bayes apresentaram desempenho menos satisfatório, principalmente devido às taxas mais altas de classificação incorreta de pacientes saudáveis.
+
+
+Os desempenhos obtidos no public leaderboard da competição do Kaggle demonstraram consistência e robustez, com as acurácias variando entre 93,7\% 
+e 93,8\%. Esses resultados refletem não apenas a alta capacidade de generalização dos modelos desenvolvidos, mas também a eficácia das técnicas 
+empregadas na tarefa de classificação. A proximidade entre as métricas alcançadas indica que os modelos mantiveram um equilíbrio entre precisão e recall, 
+garantindo uma detecção confiável de casos anormais sem comprometer significativamente a taxa de falsos positivos. Essa consistência reforça a confiabilidade 
+das abordagens adotadas e sua potencial aplicação em cenários reais.
+
+A validação estatística realizada com o teste-T pareado confirmou que as florestas aleatórias são estatisticamente equivalentes a outros métodos de alto desempenho, como regressão logística e SVM com kernels radial e linear. No entanto, considerando a variância estabelecida, as florestas aleatórias se mostraram superiores aos demais métodos analisados, reforçando sua eficácia na tarefa de detecção de pacientes com condições cardíacas anormais.
+
+\section{Estratégia final}
+
+
+Para determinar quais modelos seriam utilizados na competição, realizou-se a plotagem das curvas ROC e o cálculo dos respectivos valores de AUC 
+(Área Sob a Curva), utilizando um conjunto de 80\% treino e 20\% teste. Como a métrica de avaliação da competição era baseada no valor de AUC, optou-se por selecionar os dois modelos que apresentaram os 
+maiores valores dessa métrica, garantindo assim um desempenho superior na classificação. Após a análise das curvas ROC e dos cálculos, os valores de AUC 
+obtidos para cada modelo foram organizados e estão apresentados na tabela abaixo. 
+
+\vspace{0.3cm}
+\begin{center}
+{\scriptsize
+\begin{tabular}{|c|c|}
+\hline 
+Modelo & AUC \\ 
+\hline
+Random Forest & 95.98\% \\ 
+\hline
+Regressão Logística & 95.51\% \\ 
+\hline
+Redes Neurais & 95.42\%  \\ 
+\hline
+SVM radial & 95.11\% \\ 
+\hline
+7-NN & 94.64\% \\ 
+\hline
+SVM polinomial & 94.56\% \\ 
+\hline
+5-NN & 94.36\% \\ 
+\hline
+3-NN & 94.36\% \\ 
+\hline
+Naive Bayes & 94.16\% \\ 
+\hline
+SVM linear & 93.28\% \\ 
+\hline
+\end{tabular}
+}
+\vspace{0.1cm}
+\par {\scriptsize AUC de cada modelo}
+\end{center}
+\vspace{0.2cm}
+
+Com base na análise das curvas ROC e nos valores de AUC, os modelos selecionados para a competição foram o Random Forest, 
+com 150 estimators, e a Regressão Logística, com o parâmetro de regularização C=1. Esses modelos se destacaram por apresentarem os maiores valores de 
+AUC, demonstrando alta capacidade de distinção entre as classes e um desempenho superior na tarefa de classificação. 
+
+
+\begin{figure}[htbp]
+  \centering
+  \begin{minipage}{0.2\textwidth} 
+    \centering
+    \includegraphics[width=\textwidth]{roc_rf.png} 
+    \tiny{\caption{Curva ROC do modelo random forest}}
+    \label{fig:Curva ROC do modelo random forest}
+  \end{minipage}
+  \hfill 
+  \begin{minipage}{0.2\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{roc_rl.png}
+    \tiny{\caption{Curva ROC do modelo regressão logística}}
+    \label{fig:Curva ROC do modelo regressão logística}
+  \end{minipage}
+  \label{fig:exemplo}
+\end{figure}
+
+\section{Conclusões}
+
+Este trabalho teve como objetivo desenvolver um sistema para a detecção precoce de patologias cardiovasculares em pacientes pediátricos, empregando diversas técnicas de aprendizado de máquina. 
+
+Os resultados obtidos demonstram que os métodos de classificação avaliados foram eficazes na detecção de pacientes com condições cardíacas anormais, garantindo um bom equilíbrio entre precisão e recall. Em especial, o Random Forest se destacou por apresentar um desempenho robusto, conciliando alta acurácia com uma baixa taxa de falsos positivos. Modelos como SVM com kernel polinomial e regressão logística também mostraram resultados consistentes, reforçando sua viabilidade para aplicações clínicas.
+
+No entanto, algumas técnicas apresentaram limitações, como o k-NN e o Naive Bayes, que tiveram dificuldades na correta classificação de pacientes saudáveis, resultando em um número elevado de falsos positivos. Esse fator ressalta a importância da escolha criteriosa do modelo para garantir um diagnóstico mais confiável.
+
+Como sugestão de extensão para o trabalho, é interessante a ampliação do conjunto de dados por meio da inclusão de atributos clínicos mais detalhados, especialmente aqueles diretamente relacionados à saúde cardiovascular.
+ Variáveis como níveis de colesterol, triglicerídeos, glicemia e marcadores inflamatórios podem contribuir significativamente para a identificação de padrões mais precisos na distinção entre 
+ pacientes saudáveis e aqueles com possíveis anomalias cardíacas. 
+\begin{thebibliography}{1}
+
+  \bibitem{IEEEhowto:kopka}
+  Aprendizado de Máquina para
+Predição de Diagnósticos de Doenças Cardiovasculares, Fran-
+cisco Romes da Silva Filho e Emanuel F. Coutinho.(2022)
+
+\bibitem{citekey}
+Ghosh, P., Azam, S., Jonkman, M., Karim, A., Shamrat, F. M. J. M., Ignatious, E., Shul-
+tana, S., Beeravolu, A. R., and De Boer, F. (2021). Efficient prediction of cardiovas-
+cular disease using machine learning algorithms with relief and lasso feature selection
+techniques. 
+
+    
+  
+  \end{thebibliography}
 
 \end{document}
 
@@ -684,6 +918,9 @@ more thanks here
 \bibitem{IEEEhowto:kopka}
 H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
   0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+
+\bibitem{citekey}
+As consequências da DCV. Ghosh et al. (2021)
 
 \end{thebibliography}
 
