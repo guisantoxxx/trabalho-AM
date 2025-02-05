@@ -1,3 +1,5 @@
+<img src='https://centromedicoberrini.com.br/images/artigos/conheca-algumas-das-doencas-cardiovasculares-mais-comuns.jpg'>
+
 #### Resumo
 A detecção precoce de patologias cardiovasculares é crucial na medicina pediátrica, uma vez que muitas dessas condições se desenvolvem de forma assintomática até estágios avançados. A identificação precoce pode melhorar significativamente o prognóstico 
 e permitir tratamentos mais eficazes. Recentemente, avanços tecnológicos, incluindo o uso de aprendizado de máquina (AM), têm contribuído para aprimorar estratégias de diagnóstico, permitindo a análise eficiente de grandes volumes de dados médicos e auxiliando 
