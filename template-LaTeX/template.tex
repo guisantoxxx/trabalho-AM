@@ -427,10 +427,6 @@ massa corporal, entre outros parâmetros vitais, oferece uma visão mais clara d
 de aprendizado de máquina para análise desses grandes volumes de dados tem mostrado resultados promissores na melhoria da precisão dos diagnósticos e na personalização dos cuidados 
 médicos. 
 
-Esse cenário reflete uma mudança importante na abordagem tradicional do cuidado pediátrico, permitindo uma medicina mais proativa e personalizada, com o objetivo de salvar vidas 
-e garantir uma melhor qualidade de vida para os pacientes em risco. A detecção precoce e o monitoramento contínuo das condições cardíacas desde a infância são passos fundamentais para 
-combater o aumento das doenças cardiovasculares em adultos, que muitas vezes têm suas origens na infância.
-
 A partir dessa perspectiva, o projeto visa desenvolver um sistema de detecção precoce de patologias cardiovasculares em pacientes pediátricos 
 utilizando diferentes técnicas de aprendizado de máquina. O sistema será treinado e validado com a base de dados coletada no Real Hospital Português (RHP), visando identificar padrões 
 e fatores de risco que possam indicar a presença de doenças cardíacas. A implementação desses modelos poderá auxiliar os profissionais de saúde na tomada de decisões clínicas 
@@ -621,7 +617,6 @@ Afim de obter os resultados avaliativos, foi utilizado o método cross-validatio
 
 
 \section{Resultados}
-A tabela abaixo apresenta a média e desvio padrão de todas as medidas de desempenho selecionados, em ordem decrescente de acurácia.
 
 \begin{table}[ht]
   \tiny
@@ -648,6 +643,8 @@ A tabela abaixo apresenta a média e desvio padrão de todas as medidas de desem
   \end{tabular}
 \end{table}
 
+A tabela acima apresenta a média e desvio padrão de todas as medidas de desempenho selecionados, em ordem decrescente de acurácia.
+
 A análise dos resultados demonstra que a maioria dos métodos avaliados foi eficaz na detecção de pacientes com condições cardíacas anormais, 
 apresentando desempenho satisfatório em termos de precisão e recall. Observa-se que as técnicas de classificação conseguiram identificar corretamente 
 uma proporção significativa de casos anormais, com destaque para métodos como Random Forest e máquinas de vetores de suporte (SVM) com diferentes kernels, que alcançaram um equilíbrio adequado entre a detecção de casos anormais e a minimização de falsos positivos.
@@ -660,10 +657,8 @@ Em termos de desempenho geral, o Random Forest obteve os melhores resultados, co
 Os desempenhos obtidos no public leaderboard da competição do Kaggle demonstraram consistência e robustez, com as acurácias variando entre 93,7\% 
 e 93,8\%. Esses resultados refletem não apenas a alta capacidade de generalização dos modelos desenvolvidos, mas também a eficácia das técnicas 
 empregadas na tarefa de classificação. A proximidade entre as métricas alcançadas indica que os modelos mantiveram um equilíbrio entre precisão e recall, 
-garantindo uma detecção confiável de casos anormais sem comprometer significativamente a taxa de falsos positivos. Essa consistência reforça a confiabilidade 
-das abordagens adotadas e sua potencial aplicação em cenários reais.
+garantindo uma detecção confiável de casos anormais sem comprometer significativamente a taxa de falsos positivos.
 
-A validação estatística realizada com o teste-T pareado confirmou que as florestas aleatórias são estatisticamente equivalentes a outros métodos de alto desempenho, como regressão logística e SVM com kernels radial e linear. No entanto, considerando a variância estabelecida, as florestas aleatórias se mostraram superiores aos demais métodos analisados, reforçando sua eficácia na tarefa de detecção de pacientes com condições cardíacas anormais.
 
 \section{Estratégia final}
 
@@ -739,8 +734,6 @@ Os resultados obtidos demonstram que os métodos de classificação avaliados fo
 No entanto, algumas técnicas apresentaram limitações, como o k-NN e o Naive Bayes, que tiveram dificuldades na correta classificação de pacientes saudáveis, resultando em um número elevado de falsos positivos. Esse fator ressalta a importância da escolha criteriosa do modelo para garantir um diagnóstico mais confiável.
 
 Como sugestão de extensão para o trabalho, é interessante a ampliação do conjunto de dados por meio da inclusão de atributos clínicos mais detalhados, especialmente aqueles diretamente relacionados à saúde cardiovascular.
- Variáveis como níveis de colesterol, triglicerídeos, glicemia e marcadores inflamatórios podem contribuir significativamente para a identificação de padrões mais precisos na distinção entre 
- pacientes saudáveis e aqueles com possíveis anomalias cardíacas. 
 \begin{thebibliography}{1}
 
   \bibitem{IEEEhowto:kopka}
