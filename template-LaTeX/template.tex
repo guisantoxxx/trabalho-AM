@@ -629,16 +629,16 @@ Afim de obter os resultados avaliativos, foi utilizado o método cross-validatio
   \toprule
   \textbf{Modelo} & \textbf{Acurácia (\%)} & \textbf{Precisão (\%)} & \textbf{Recall (\%)} & \textbf{F1 Score (\%)} \\
   \midrule
-  Random Forest       & 88.63 \pm 1.74 & 72.28 \pm 5.45 & 3.20 \pm 1.58 & 0.86 \pm 0.02 \\
-  SVM Radial          & 87.83 \pm 2.10 & 72.17 \pm 6.17 & 4.34 \pm 1.59 & 0.85 \pm 0.03 \\
-  SVM Polinomial      & 87.45 \pm 1.92 & 71.27 \pm 5.72 & 4.45 \pm 1.52 & 0.85 \pm 0.02 \\
-  SVM Linear          & 87.33 \pm 2.12 & 70.51 \pm 5.74 & 4.25 \pm 1.84 & 0.85 \pm 0.02 \\
-  Regressão Logística & 86.10 \pm 1.98 & 71.24 \pm 5.27 & 6.46 \pm 1.96 & 0.84 \pm 0.02 \\
-  Redes Neurais       & 86.10 \pm 1.98 & 71.24 \pm 5.27 & 6.46 \pm 1.96 & 0.84 \pm 0.02 \\
-  7-NN                & 85.67 \pm 1.99 & 76.96 \pm 5.11 & 5.73 \pm 2.17 & 0.83 \pm 0.03 \\
-  5-NN                & 85.52 \pm 1.72 & 70.84 \pm 4.77 & 6.96 \pm 2.17 & 0.83 \pm 0.02 \\
-  3-NN                & 84.07 \pm 2.87 & 71.75 \pm 5.53 & 9.77 \pm 3.10 & 0.82 \pm 0.03 \\
-  Naïve Bayes         & 82.51 \pm 2.15 & 72.06 \pm 4.88 & 12.27 \pm 2.42 & 0.80 \pm 0.03 \\
+  Random Forest       & 93.64 \pm 0.42 & 97.41 \pm 0.65 & 89.72 \pm 1.08 & 93.40 \pm 0.47 \\
+  SVM Linear         & 93.60 \pm 0.43 & 98.02 \pm 0.63 & 89.07 \pm 1.09 & 93.32 \pm 0.48 \\
+  SVM Radial         & 93.59 \pm 0.45 & 98.02 \pm 0.63 & 89.04 \pm 1.12 & 93.31 \pm 0.50 \\
+  SVM Polinomial     & 93.57 \pm 0.49 & 97.92 \pm 0.65 & 89.11 \pm 1.28 & 93.30 \pm 0.55 \\
+  Regressão Logística & 93.50 \pm 0.46 & 97.91 \pm 0.73 & 88.97 \pm 1.20 & 93.22 \pm 0.51 \\
+  Redes Neurais       & 93.45 \pm 0.56 & 97.48 \pm 0.65 & 89.28 \pm 1.29 & 93.19 \pm 0.62 \\
+  7-NN                & 92.85 \pm 0.48 & 97.73 \pm 0.55 & 87.81 \pm 1.23 & 92.50 \pm 0.55 \\
+  5-NN                & 92.75 \pm 0.50 & 97.21 \pm 0.47 & 88.10 \pm 1.26 & 92.42 \pm 0.58 \\
+  3-NN                & 92.14 \pm 0.88 & 95.64 \pm 0.69 & 88.39 \pm 1.53 & 91.87 \pm 0.95 \\
+  Naïve Bayes         & 92.10 \pm 0.52 & 97.11 \pm 0.89 & 86.87 \pm 1.46 & 91.69 \pm 0.60 \\
   \bottomrule
   \end{tabular}
 \end{table}
@@ -675,25 +675,25 @@ obtidos para cada modelo foram organizados e estão apresentados na tabela abaix
 \hline 
 Modelo & AUC \\ 
 \hline
-Random Forest & 95.98\% \\ 
+Random Forest & 95.75\% \\ 
 \hline
-Regressão Logística & 95.51\% \\ 
+SVM radial & 95.33\% \\ 
 \hline
-Redes Neurais & 95.42\%  \\ 
+SVM polinomial & 95.29\% \\ 
 \hline
-SVM radial & 95.11\% \\ 
+Regressão Logística & 95.17\% \\ 
 \hline
-7-NN & 94.64\% \\ 
+Redes Neurais & 95.12\%  \\ 
 \hline
-SVM polinomial & 94.56\% \\ 
+SVM linear& 94.96\% \\ 
 \hline
-5-NN & 94.36\% \\ 
+7-NN & 94.29\% \\ 
 \hline
-3-NN & 94.36\% \\ 
+Naive Bayes & 94.24\% \\ 
 \hline
-Naive Bayes & 94.16\% \\ 
+5-NN & 94.04\% \\ 
 \hline
-SVM linear & 93.28\% \\ 
+3-NN & 93.51\% \\ 
 \hline
 \end{tabular}
 }
@@ -702,8 +702,7 @@ SVM linear & 93.28\% \\
 \end{center}
 \vspace{0.2cm}
 
-Com base na análise das curvas ROC e nos valores de AUC, os modelos selecionados para a competição foram o Random Forest, 
-com 150 estimators, e a Regressão Logística, com o parâmetro de regularização C=1. Esses modelos se destacaram por apresentarem os maiores valores de 
+Com base na análise das curvas ROC e nos valores de AUC, os modelos selecionados para a competição foram o Random Forest e SVM com kernel radial. Esses modelos se destacaram por apresentarem os maiores valores de 
 AUC, demonstrando alta capacidade de distinção entre as classes e um desempenho superior na tarefa de classificação. 
 
 
@@ -718,9 +717,9 @@ AUC, demonstrando alta capacidade de distinção entre as classes e um desempenh
   \hfill 
   \begin{minipage}{0.2\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{roc_rl.png}
-    \tiny{\caption{Curva ROC do modelo regressão logística}}
-    \label{fig:Curva ROC do modelo regressão logística}
+    \includegraphics[width=\textwidth]{roc_radial.png}
+    \tiny{\caption{Curva ROC do modelo SVM com kernel radial}}
+    \label{fig:Curva ROC do modelo SVM com kernel radial}
   \end{minipage}
   \label{fig:exemplo}
 \end{figure}
